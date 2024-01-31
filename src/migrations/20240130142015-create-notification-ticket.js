@@ -11,23 +11,24 @@ module.exports = {
       },
       subject: {
         type: Sequelize.STRING,
-        allowNull:false
+        allowNull: false
       },
       content: {
         type: Sequelize.STRING,
-        allowNull:false
+        allowNull: false
       },
       recepientEmail: {
         type: Sequelize.STRING
       },
       status: {
         type: Sequelize.ENUM,
-        allowNull:false,
-        values:["Pending", "Success", "Failed"]
+        allowNull: false,
+        values: ["PENDING", "SUCCESS", "FAILED"],
+        defaultValue: "PENDING"
       },
-      notifiationTime: {
+      notificationTime: {
         type: Sequelize.DATE,
-        allowNull:false
+        allowNull: false
       },
       createdAt: {
         allowNull: false,

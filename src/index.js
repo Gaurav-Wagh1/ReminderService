@@ -1,8 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { PORT } = require('./config/server-config');
-const { sendBasicEmail } = require('./services/email-service');
-const cron = require('node-cron');
+const { setupJobs } = require('./utils/job');
+const TicketController = require('./controller/ticket-controller');
+const db = require('./models/index');
 
 const startServer = () => {
     const app = express();
@@ -10,16 +11,13 @@ const startServer = () => {
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: true }));
 
+    // Routes
+    app.post('/api/v1/tickets', TicketController.create);
+
     app.listen(PORT, () => {
         console.log(`Server started on port ${PORT}`);
-
-        // sendBasicEmail(
-        //     'support@admin.com',
-        //     // 'reminder.service.gw@gmail.com',
-        //     'terahastachehra@gmail.com',
-        //     'This is a testing email',
-        //     'Hey, this is a new topic in our syllabus'
-        // );
+        setupJobs();
+        // db.sequelize.sync({ alter: true });
     });
 }
 

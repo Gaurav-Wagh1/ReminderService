@@ -1,12 +1,43 @@
-const sender = require('../config/email-config');
+const { NotificationTicketRepository } = require('../repository/ticket-repository');
 
-const sendBasicEmail = (mailFrom, mailTo, mailSubject, mailBody) => {
-    sender.sendMail({
-        from: mailFrom,
-        to: mailTo,
-        subject: mailSubject,
-        text: mailBody
-    })
+class EmailService {
+    constructor() {
+        this.notificationTicketRepository =
+            new NotificationTicketRepository();
+    }
+
+
+    async createNotification(data) {
+        try {
+            const response = await this.notificationTicketRepository.createNotification(data);
+            return response;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+
+
+    async fetchPendingEmails() {
+        try {
+            const response = await this.notificationTicketRepository.get({ status: "PENDING" });
+            return response;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+
+    async updateTicket(ticketId, data) {
+        try {
+            const response = await this.notificationTicketRepository.updateTicket(ticketId, data);
+            return response;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+
 }
 
-module.exports = { sendBasicEmail };
+module.exports = { EmailService };
