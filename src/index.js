@@ -1,11 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { PORT } = require('./config/server-config');
-const { setupJobs } = require('./utils/job');
+const { setupJobs, queueOperations } = require('./utils/job');
 const TicketController = require('./controller/ticket-controller');
-const db = require('./models/index');
 
-const startServer = () => {
+const startServer = async () => {
     const app = express();
 
     app.use(bodyParser.json());
@@ -14,9 +13,10 @@ const startServer = () => {
     // Routes
     app.post('/api/v1/tickets', TicketController.create);
 
-    app.listen(PORT, () => {
+    app.listen(PORT, async () => {
         console.log(`Server started on port ${PORT}`);
         setupJobs();
+        queueOperations();
         // db.sequelize.sync({ alter: true });
     });
 }
